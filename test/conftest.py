@@ -21,13 +21,12 @@ def client(app):
     return app.test_client()
 
 
-# @pytest.fixture
-# def two_saved_books(app):
-#     # Arrange
-#     ocean_book = Book(title="Ocean Book",
-#                       description="watr 4evr")
-#     mountain_book = Book(title="Mountain Book",
-#                          description="i luv 2 climb rocks")
+@pytest.fixture
+def two_saved_planets(app):
+    first_planet = Planet(name="Earth",
+                          description="Mostly Harmless", has_rings=False)
+    second_planet = Planet(name="Galifray",
+                           description="Very unharmless", has_rings=False)
 
-#     db.session.add_all([ocean_book, mountain_book])
-#     db.session.commit()
+    db.session.add_all([first_planet, second_planet])
+    db.session.commit()

@@ -17,7 +17,8 @@ def handle_planets():
                 "description": planet.description,
                 "has_rings": planet.has_rings
             })
-        return jsonify(planets_response)
+        return make_response(jsonify(planets_response), 200)
+        # return jsonify(planets_response), 200
     elif request.method == 'POST':
         request_body = request.get_json()
         new_planet = Planet(name=request_body["name"],
@@ -27,21 +28,23 @@ def handle_planets():
         return make_response(f"Planet {new_planet.name} successfully created", 201)
 
 
-@planet_bp.route("/<planet_id>", methods=["GET", "PUT", "DELETE"])
+@ planet_bp.route("/<planet_id>", methods=["GET", "PUT", "DELETE"])
 def handle_planet(planet_id):
     planet = Planet.query.get(planet_id)
-    if not planet: 
+    if not planet:
         return make_response(f"Planet {planet_id} not found", 404)
- 
+
     if request.method == "GET":
-        return{
+
+        planets_response = [{
             "id": planet.id,
             "name": planet.name,
             "description": planet.description,
             "has_rings": planet.has_rings
-        }
+        }]
+        return make_response(jsonify(planets_response), 200)
     elif request.method == "PUT":
-        form_data=request.get_json()
+        form_data = request.get_json()
         planet.name = form_data["name"]
         planet.description = form_data["description"]
         planet.has_rings = form_data["has_rings"]
@@ -49,11 +52,9 @@ def handle_planet(planet_id):
         db.session.commit()
 
         return make_response(f"Planet {planet.name} successfully updated", 200)
-    
+
     elif request.method == "DELETE":
         db.session.delete(planet)
         db.session.commit()
-        
+
         return make_response(f"Planet {planet.name} successfully deleted", 200)
-
-
